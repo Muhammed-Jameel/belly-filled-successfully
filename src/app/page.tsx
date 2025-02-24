@@ -11,11 +11,12 @@ const IftarInvitation = () => {
 
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [carouselStart, setCarouselStart] = useState(0);
-  const [friendName, setFriendName] = useState('');
+  const [friendName, setFriendName] = useState("");
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
-  
+  console.log(carouselStart);
+
   const carouselRef = useRef<HTMLDivElement>(null);
   const imagesPerView = 4;
 
@@ -37,7 +38,7 @@ const IftarInvitation = () => {
     if (!isDragging) return;
     e.preventDefault();
     if (!carouselRef.current) return;
-    
+
     const x = e.pageX - (carouselRef.current?.offsetLeft || 0);
     const walk = (x - startX) * 2;
     carouselRef.current.scrollLeft = scrollLeft - walk;
@@ -45,18 +46,27 @@ const IftarInvitation = () => {
 
   const handleScroll = () => {
     if (!carouselRef.current) return;
-    const newStart = Math.floor(carouselRef.current.scrollLeft / (carouselRef.current.clientWidth / imagesPerView));
+    const newStart = Math.floor(
+      carouselRef.current.scrollLeft /
+        (carouselRef.current.clientWidth / imagesPerView)
+    );
     setCarouselStart(newStart);
   };
 
   const nextImages = () => {
     if (!carouselRef.current) return;
-    carouselRef.current.scrollBy({ left: carouselRef.current.clientWidth / imagesPerView, behavior: 'smooth' });
+    carouselRef.current.scrollBy({
+      left: carouselRef.current.clientWidth / imagesPerView,
+      behavior: "smooth",
+    });
   };
 
   const prevImages = () => {
     if (!carouselRef.current) return;
-    carouselRef.current.scrollBy({ left: -(carouselRef.current.clientWidth / imagesPerView), behavior: 'smooth' });
+    carouselRef.current.scrollBy({
+      left: -(carouselRef.current.clientWidth / imagesPerView),
+      behavior: "smooth",
+    });
   };
 
   const handleDownload = () => {
@@ -68,7 +78,6 @@ const IftarInvitation = () => {
     link.click();
     document.body.removeChild(link);
   };
-
 
   const handleShare = async () => {
     if (navigator.share) {
@@ -91,7 +100,9 @@ const IftarInvitation = () => {
       <Card className="w-full mx-10 max-w-4xl bg-orange-300/20 backdrop-blur-sm">
         <CardContent className="p-6">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold mb-4 text-amber-950">إختر تعبئة الكرش المناسبة لليوم او أرسل دعوة تعبئة الكرش</h1>
+            <h1 className="text-3xl font-bold mb-4 text-amber-950">
+              إختر تعبئة الكرش المناسبة لليوم او أرسل دعوة تعبئة الكرش
+            </h1>
 
             {/* Preview Section */}
             <div className="relative w-full md:w2/3 lg:w-1/2 aspect-auto mb-8 flex items-center justify-center mx-auto">
@@ -123,7 +134,7 @@ const IftarInvitation = () => {
 
           {/* Carousel Section */}
           <div className="relative mb-8">
-            <div 
+            <div
               ref={carouselRef}
               className="flex gap-4 overflow-x-auto scrollbar-hide scroll-smooth"
               onMouseDown={handleMouseDown}
@@ -131,13 +142,13 @@ const IftarInvitation = () => {
               onMouseLeave={handleMouseLeave}
               onMouseMove={handleMouseMove}
               onScroll={handleScroll}
-              style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
+              style={{ cursor: isDragging ? "grabbing" : "grab" }}
             >
               {images.map((image, index) => (
-                <div 
+                <div
                   key={index}
                   className={`flex-shrink-0 w-1/4 aspect-square cursor-pointer transition-all ${
-                    selectedImageIndex === index ? 'ring-4 ring-blue-500' : ''
+                    selectedImageIndex === index ? "ring-4 ring-blue-500" : ""
                   }`}
                   onClick={() => setSelectedImageIndex(index)}
                 >
@@ -179,10 +190,7 @@ const IftarInvitation = () => {
               <Download className="h-4 w-4" />
               قم بتنزيل التعبئة المختارة
             </Button>
-            <Button
-              onClick={handleShare}
-              className="flex items-center gap-2"
-            >
+            <Button onClick={handleShare} className="flex items-center gap-2">
               <Share2 className="h-4 w-4" />
               قم بمشاركة التعبئة المختارة
             </Button>
